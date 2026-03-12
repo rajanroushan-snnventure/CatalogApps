@@ -8,8 +8,11 @@ Production-grade **Kotlin Multiplatform Mobile** product catalog app built with:
 - **Navigation + Deep Links** in a dedicated core module
 - **Animated Splash Screen** (Android 12 SplashScreen API + Compose)
 - **Certificate Pinning** + **Network Security Config**
+<img width="1080" height="2400" alt="Screenshot_20260312_203311" src="https://github.com/user-attachments/assets/1071a9cd-306e-45eb-9a01-cfd506da8486" />
+<img width="1080" height="2400" alt="Screenshot_20260312_203256" src="https://github.com/user-attachments/assets/4e369009-fcfb-4b8f-a71a-87b1b8547933" />
+<img width="1080" height="2400" alt="Screenshot_20260312_203240" src="https://github.com/user-attachments/assets/1eb067d8-6eb9-4fdf-9295-3759b19b2936" />
+<img width="1915" height="392" alt="Screenshot 2026-03-12 195359" src="https://github.com/user-attachments/assets/49bde39e-c947-4915-9fc3-96adc7645c2e" />
 
-API: [DummyJSON Products API](https://dummyjson.com/docs/products)
 
 ---
 
@@ -320,3 +323,10 @@ _stateDelegate.update { it.copy(products = ...) }
     ↓
 StateFlow<State> → collectAsState() → Composable recomposition
 ```
+
+Note - > Unable to test IOS App as i don't have the MACBOOK
+
+
+
+
+U

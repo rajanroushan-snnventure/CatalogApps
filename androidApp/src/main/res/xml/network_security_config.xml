@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--&lt;!&ndash;-->
+<!--  Network Security Configuration for Revest Catalog.-->
+
+<!--  Rules:-->
+<!--  • All traffic must use HTTPS (no cleartext allowed in release).-->
+<!--  • Certificate pins applied to dummyjson.com for defence-in-depth.-->
+<!--  • Debug builds allow user-installed CAs for Charles/Proxyman.-->
+<!--&ndash;&gt;-->
+<!--<network-security-config>-->
+
+<!--    &lt;!&ndash; Default: HTTPS only, trust system CAs only (no user CAs in prod) &ndash;&gt;-->
+<!--    <base-config cleartextTrafficPermitted="false">-->
+<!--        <trust-anchors>-->
+<!--            <certificates src="system" />-->
+<!--        </trust-anchors>-->
+<!--    </base-config>-->
+
+<!--    &lt;!&ndash; API domain with certificate pinning &ndash;&gt;-->
+<!--    <domain-config cleartextTrafficPermitted="false">-->
+<!--        <domain includeSubdomains="true">dummyjson.com</domain>-->
+
+<!--        <trust-anchors>-->
+<!--            <certificates src="system" />-->
+<!--        </trust-anchors>-->
+
+<!--        &lt;!&ndash;-->
+<!--            SHA-256 pins for the server's public key.-->
+<!--            Always provide backup pins (at least two) to avoid lockout on cert rotation.-->
+<!--            Regenerate with:-->
+<!--              openssl s_client -connect dummyjson.com:443 < /dev/null 2>/dev/null \-->
+<!--                | openssl x509 -pubkey -noout \-->
+<!--                | openssl pkey -pubin -outform der \-->
+<!--                | openssl dgst -sha256 -binary | base64-->
+<!--        &ndash;&gt;-->
+<!--        <pin-set expiration="2026-01-01">-->
+<!--            &lt;!&ndash; Leaf certificate &ndash;&gt;-->
+<!--            <pin digest="SHA-256">FEzVOUp4dF3gI0ZVPRJhFbSJVXR+uQmMH65xhs1glH4=</pin>-->
+<!--            &lt;!&ndash; Let's Encrypt R3 intermediate (backup) &ndash;&gt;-->
+<!--            <pin digest="SHA-256">Y9mvm0exBk1JoQ57f9Vm28jKo5lFm/woKcVxrYxu80o=</pin>-->
+<!--            &lt;!&ndash; ISRG Root X1 (backup) &ndash;&gt;-->
+<!--            <pin digest="SHA-256">HXZBWNO9X2c12Jz6sIEPvxkRRGvfB7Jh3mBbJgF2is=</pin>-->
+<!--        </pin-set>-->
+<!--    </domain-config>-->
+
+<!--    &lt;!&ndash; Debug config: allow user-installed CAs for proxy interception &ndash;&gt;-->
+<!--    <debug-overrides>-->
+<!--        <trust-anchors>-->
+<!--            <certificates src="system" />-->
+<!--            <certificates src="user" />-->
+<!--        </trust-anchors>-->
+<!--    </debug-overrides>-->
+
+<!--</network-security-config>-->
+
+<network-security-config>
+
+    <!-- Default: HTTPS only, trust system CAs only -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- API domain (without certificate pinning) -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">dummyjson.com</domain>
+
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Debug config: allow user-installed CAs for proxy interception -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+
+</network-security-config>

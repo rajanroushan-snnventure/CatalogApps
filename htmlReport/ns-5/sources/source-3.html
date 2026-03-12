@@ -1,0 +1,473 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProductListViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.revest.feature.productlist.presentation</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductListViewModel (com.revest.feature.productlist.presentation)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductListViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    54.5%
+  </span>
+  <span class="absValue">
+    (12/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.6%
+  </span>
+  <span class="absValue">
+    (45/58)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ProductListViewModel$Companion</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListViewModel$loadCategories$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListViewModel$loadProducts$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (8/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/29)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListViewModel$observeSearch$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListViewModel$observeSearch$1$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    76.5%
+  </span>
+  <span class="absValue">
+    (13/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.3%
+  </span>
+  <span class="absValue">
+    (21/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.6%
+  </span>
+  <span class="absValue">
+    (81/103)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.revest.feature.productlist.presentation
+&nbsp;
+&nbsp;import com.revest.core.common.BaseViewModel
+&nbsp;import com.revest.core.common.AppDispatchers
+&nbsp;import com.revest.core.common.stateDelegate
+&nbsp;import com.revest.domain.model.Product
+&nbsp;import com.revest.domain.usecase.*
+&nbsp;import kotlinx.coroutines.FlowPreview
+&nbsp;import kotlinx.coroutines.flow.*
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;// ── State ─────────────────────────────────────────────────────────────────────
+&nbsp;data class ProductListState(
+&nbsp;    val products: List&lt;Product&gt;   = emptyList(),
+&nbsp;    val isLoading: Boolean        = false,
+&nbsp;    val isFilterLoading: Boolean  = false,
+&nbsp;    val error: String?            = null,
+&nbsp;    val searchQuery: String       = &quot;&quot;,
+&nbsp;    val selectedCategory: String? = null,
+&nbsp;    val categories: List&lt;String&gt;  = emptyList(),
+&nbsp;    val isSearchMode: Boolean     = false,
+&nbsp;    val canLoadMore: Boolean      = true,
+&nbsp;    // FIX: track skip directly instead of deriving it from currentPage * PAGE_SIZE.
+&nbsp;    // currentPage was read from a stale snapshot `s` captured before the coroutine
+&nbsp;    // ran, so page 3+ always re-sent skip=20. Using skip avoids the off-by-one.
+&nbsp;    val currentSkip: Int          = 0,
+&nbsp;    val totalProducts: Int        = 0
+&nbsp;)
+&nbsp;
+&nbsp;// ── Events ────────────────────────────────────────────────────────────────────
+&nbsp;sealed class ProductListEvent {
+&nbsp;    data class SearchQueryChanged(val query: String) : ProductListEvent()
+&nbsp;    data class CategorySelected(val category: String?) : ProductListEvent()
+&nbsp;    data class ProductClicked(val productId: Int) : ProductListEvent()
+&nbsp;    object LoadMore     : ProductListEvent()
+&nbsp;    object Refresh      : ProductListEvent()
+&nbsp;    object DismissError : ProductListEvent()
+&nbsp;}
+&nbsp;
+&nbsp;// ── ViewModel ─────────────────────────────────────────────────────────────────
+&nbsp;class ProductListViewModel(
+<b class="fc">&nbsp;    private val getProductsUseCase: GetProductsUseCase,</b>
+<b class="fc">&nbsp;    private val searchProductsUseCase: SearchProductsUseCase,</b>
+<b class="fc">&nbsp;    private val getCategoriesUseCase: GetCategoriesUseCase,</b>
+<b class="fc">&nbsp;    private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase</b>
+<b class="fc">&nbsp;) : BaseViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _stateDelegate = stateDelegate(ProductListState(isLoading = true))</b>
+<b class="fc">&nbsp;    val state: StateFlow&lt;ProductListState&gt; by _stateDelegate</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _searchFlow = MutableStateFlow(&quot;&quot;)</b>
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="fc">&nbsp;        loadCategories()</b>
+<b class="fc">&nbsp;        loadProducts(reset = true)</b>
+<b class="fc">&nbsp;        observeSearch()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun onEvent(event: ProductListEvent) {
+<b class="fc">&nbsp;        when (event) {</b>
+<b class="fc">&nbsp;            is ProductListEvent.SearchQueryChanged -&gt; {</b>
+<b class="fc">&nbsp;                _stateDelegate.update { it.copy(searchQuery = event.query) }</b>
+<b class="fc">&nbsp;                _searchFlow.value = event.query</b>
+<b class="fc">&nbsp;                if(event.query.isNotEmpty()) {</b>
+<b class="fc">&nbsp;                    _stateDelegate.update {</b>
+<b class="fc">&nbsp;                        it.copy(</b>
+<b class="fc">&nbsp;                            isSearchMode = true,</b>
+<b class="fc">&nbsp;                            error = null</b>
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                } else {
+<b class="fc">&nbsp;                    _stateDelegate.update {</b>
+<b class="fc">&nbsp;                        it.copy(</b>
+<b class="fc">&nbsp;                            isSearchMode = false,</b>
+<b class="fc">&nbsp;                            error = null</b>
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            is ProductListEvent.CategorySelected -&gt; {</b>
+<b class="fc">&nbsp;                _stateDelegate.update {</b>
+<b class="fc">&nbsp;                    it.copy(</b>
+<b class="fc">&nbsp;                        selectedCategory = event.category,</b>
+<b class="fc">&nbsp;                        isFilterLoading  = false,</b>
+<b class="fc">&nbsp;                        isLoading = false,</b>
+<b class="fc">&nbsp;                        currentSkip      = 0,</b>
+<b class="fc">&nbsp;                        canLoadMore      = true,</b>
+<b class="fc">&nbsp;                        searchQuery      = &quot;&quot;,</b>
+<b class="fc">&nbsp;                        isSearchMode     = false,</b>
+<b class="fc">&nbsp;                        error            = null</b>
+&nbsp;                    )
+&nbsp;                }
+<b class="fc">&nbsp;                _searchFlow.value = &quot;&quot;</b>
+<b class="fc">&nbsp;                loadProducts(reset = true)</b>
+&nbsp;            }
+<b class="pc">&nbsp;            ProductListEvent.LoadMore -&gt; {</b>
+<b class="fc">&nbsp;                val s = _stateDelegate.current</b>
+<b class="pc">&nbsp;                if (!s.isLoading &amp;&amp; !s.isFilterLoading &amp;&amp; s.canLoadMore &amp;&amp; !s.isSearchMode) {</b>
+<b class="nc">&nbsp;                    loadProducts(reset = false)</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            ProductListEvent.Refresh -&gt; {</b>
+<b class="nc">&nbsp;                _stateDelegate.update {</b>
+<b class="nc">&nbsp;                    it.copy(</b>
+<b class="nc">&nbsp;                        products    = emptyList(),</b>
+<b class="nc">&nbsp;                        currentSkip = 0,</b>
+<b class="nc">&nbsp;                        canLoadMore = true,</b>
+<b class="nc">&nbsp;                        error       = null</b>
+&nbsp;                    )
+&nbsp;                }
+<b class="nc">&nbsp;                loadProducts(reset = true)</b>
+&nbsp;            }
+<b class="nc">&nbsp;            ProductListEvent.DismissError -&gt;</b>
+<b class="nc">&nbsp;                _stateDelegate.update { it.copy(error = null) }</b>
+<b class="nc">&nbsp;            is ProductListEvent.ProductClicked -&gt; { /* handled by NavController */ }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @OptIn(FlowPreview::class)
+&nbsp;    private fun observeSearch() {
+<b class="fc">&nbsp;        launch(AppDispatchers.default) {</b>
+<b class="fc">&nbsp;            _searchFlow</b>
+<b class="fc">&nbsp;                .debounce(400)</b>
+<b class="fc">&nbsp;                .distinctUntilChanged()</b>
+<b class="fc">&nbsp;                .collectLatest { query -&gt;</b>
+<b class="nc">&nbsp;                    if (query.isBlank()) {</b>
+<b class="nc">&nbsp;                        _stateDelegate.update {</b>
+<b class="nc">&nbsp;                            it.copy(</b>
+<b class="nc">&nbsp;                                isSearchMode    = false,</b>
+<b class="nc">&nbsp;                                isFilterLoading = true,</b>
+<b class="nc">&nbsp;                                currentSkip     = 0,</b>
+<b class="nc">&nbsp;                                canLoadMore     = true</b>
+&nbsp;                            )
+&nbsp;                        }
+<b class="nc">&nbsp;                        loadProducts(reset = true)</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        performSearch(query.trim())</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun loadProducts(reset: Boolean) {
+&nbsp;        // Read state ONCE inside the coroutine just before the network call
+&nbsp;        // so we always have the freshest skip value.
+<b class="fc">&nbsp;        launch(AppDispatchers.io) {</b>
+<b class="fc">&nbsp;            val s = _stateDelegate.current</b>
+<b class="pc">&nbsp;            if (s.isSearchMode) return@launch</b>
+&nbsp;
+<b class="fc">&nbsp;            _stateDelegate.update { it.copy(isLoading = true, error = null) }</b>
+&nbsp;
+&nbsp;            // FIX: use currentSkip from state (updated after each page) instead of
+&nbsp;            // computing skip = currentPage * PAGE_SIZE from a stale outer snapshot.
+<b class="pc">&nbsp;            val skip = if (reset) 0 else _stateDelegate.current.currentSkip</b>
+&nbsp;
+<b class="fc">&nbsp;            val result = if (s.selectedCategory != null) {</b>
+&nbsp;                // FIX: pass limit + skip so category results also paginate
+<b class="fc">&nbsp;                getProductsByCategoryUseCase(</b>
+<b class="fc">&nbsp;                    category = s.selectedCategory,</b>
+<b class="fc">&nbsp;                    limit    = PAGE_SIZE,</b>
+<b class="fc">&nbsp;                    skip     = skip</b>
+&nbsp;                )
+&nbsp;            } else {
+<b class="fc">&nbsp;                getProductsUseCase(limit = PAGE_SIZE, skip = skip)</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            result.fold(</b>
+&nbsp;                onSuccess = { page -&gt;
+<b class="fc">&nbsp;                    _stateDelegate.update {</b>
+<b class="pc">&nbsp;                        val merged   = if (reset) page.products else it.products + page.products</b>
+<b class="fc">&nbsp;                        val nextSkip = skip + page.products.size</b>
+<b class="fc">&nbsp;                        it.copy(</b>
+<b class="fc">&nbsp;                            products        = merged,</b>
+<b class="fc">&nbsp;                            totalProducts   = page.total,</b>
+<b class="fc">&nbsp;                            isLoading       = false,</b>
+<b class="fc">&nbsp;                            isFilterLoading = false,</b>
+&nbsp;                            // FIX: advance skip by the number of items actually returned,
+&nbsp;                            // not by PAGE_SIZE, so the last partial page is handled correctly
+<b class="fc">&nbsp;                            currentSkip     = nextSkip,</b>
+<b class="fc">&nbsp;                            canLoadMore     = page.hasMore,</b>
+<b class="fc">&nbsp;                            isSearchMode    = false</b>
+&nbsp;                        )
+&nbsp;                    }
+<b class="fc">&nbsp;                },</b>
+&nbsp;                onFailure = { err -&gt;
+<b class="fc">&nbsp;                    _stateDelegate.update {</b>
+<b class="fc">&nbsp;                        it.copy(</b>
+<b class="fc">&nbsp;                            isLoading       = false,</b>
+<b class="fc">&nbsp;                            isFilterLoading = false,</b>
+<b class="pc">&nbsp;                            error           = err.message ?: &quot;Unknown error&quot;</b>
+&nbsp;                        )
+&nbsp;                    }
+<b class="fc">&nbsp;                }</b>
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun performSearch(query: String) {
+<b class="nc">&nbsp;        launch(AppDispatchers.io) {</b>
+&nbsp;            _stateDelegate.update {
+&nbsp;                it.copy(isLoading = true, error = null, isSearchMode = true)
+&nbsp;            }
+&nbsp;            searchProductsUseCase(query).fold(
+&nbsp;                onSuccess = { page -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            products        = page.products,
+&nbsp;                            totalProducts   = page.total,
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            canLoadMore     = false
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                },
+&nbsp;                onFailure = { err -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            error           = err.message ?: &quot;Search failed&quot;
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun loadCategories() {
+<b class="fc">&nbsp;        launch(AppDispatchers.io) {</b>
+<b class="pc">&nbsp;            getCategoriesUseCase().onSuccess { cats -&gt;</b>
+<b class="fc">&nbsp;                _stateDelegate.update { it.copy(categories = cats) }</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    companion object {
+&nbsp;        private const val PAGE_SIZE = 20
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-12 19:52</div>
+</div>
+</body>
+</html>

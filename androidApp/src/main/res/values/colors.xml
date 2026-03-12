@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launcher -->
+    <color name="ic_launcher_background">#1A237E</color>
+
+    <!-- Brand palette — mirrors Color.kt for use in themes.xml / splash drawable -->
+    <color name="primary_light">#1A237E</color>
+    <color name="primary_dark">#BAC3FF</color>
+    <color name="primary_container_light">#DDE1FF</color>
+    <color name="primary_container_dark">#003399</color>
+
+    <color name="secondary_light">#283593</color>
+    <color name="secondary_dark">#BBC4FF</color>
+
+    <color name="tertiary_light">#3F51B5</color>
+    <color name="tertiary_dark">#BFC6FF</color>
+
+    <color name="error_light">#BA1A1A</color>
+    <color name="error_container_light">#FFDDAD6</color>
+    <color name="error_dark">#FFB4AB</color>
+    <color name="error_container_dark">#93000A</color>
+
+    <color name="surface_light">#FBF8FF</color>
+    <color name="surface_dark">#131318</color>
+    <color name="surface_variant_light">#E3E1EC</color>
+    <color name="surface_variant_dark">#47464F</color>
+
+    <color name="outline_light">#75737D</color>
+    <color name="outline_dark">#908E98</color>
+
+    <!-- Splash gradient stops -->
+    <color name="splash_gradient_start">#0D1B6E</color>
+    <color name="splash_gradient_mid">#1A237E</color>
+    <color name="splash_gradient_end">#283593</color>
+</resources>

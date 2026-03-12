@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main app theme — no action bar, Material 3 -->
+    <style name="Theme.RevestCatalog" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <!-- Splash screen theme (androidx SplashScreen API) -->
+    <!-- windowSplashScreenBrandingImage is defined in values-v31/themes.xml (API 31+) -->
+    <style name="Theme.RevestCatalog.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#1A237E</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.RevestCatalog</item>
+    </style>
+</resources>

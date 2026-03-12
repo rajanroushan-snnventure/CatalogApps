@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Revest Catalog</string>
+    <string name="app_version">v1.0.0</string>
+
+    <!-- Splash -->
+    <string name="splash_brand_name">REVEST</string>
+    <string name="splash_tagline">Product Catalog</string>
+    <string name="splash_logo_content_desc">Revest Logo</string>
+
+    <!-- Top bar -->
+    <string name="topbar_title">Revest Catalog</string>
+    <string name="topbar_filter_content_desc">Filter</string>
+    <string name="topbar_back_content_desc">Back</string>
+    <string name="topbar_products_count">%1$d / %2$d products</string>
+
+    <!-- Search bar -->
+    <string name="search_placeholder">Search products…</string>
+    <string name="search_content_desc">Search</string>
+    <string name="search_clear_content_desc">Clear</string>
+    <string name="search_results_header">%1$d results for "%2$s"</string>
+    <string name="search_clear_button">Clear</string>
+
+    <!-- Category chips -->
+    <string name="category_all">All</string>
+
+    <!-- Product list -->
+    <string name="product_list_empty">No products available</string>
+    <string name="product_list_end">All %1$d products loaded</string>
+    <string name="search_empty">No results for "%1$s"</string>
+
+    <!-- Product detail -->
+    <string name="detail_title_fallback">Product Detail</string>
+    <string name="detail_section_description">Description</string>
+    <string name="detail_label_brand">Brand</string>
+    <string name="detail_label_price">Price</string>
+    <string name="detail_stock">%1$d in stock</string>
+    <string name="detail_discount_badge">-%1$d%% OFF</string>
+    <string name="detail_original_price">Was $%1$.2f</string>
+    <string name="detail_add_to_cart">Add to Cart</string>
+    <string name="detail_bullet_separator">•</string>
+
+    <!-- Discount badge (product card) -->
+    <string name="discount_badge">-%1$d%%</string>
+
+    <!-- Error view -->
+    <string name="error_title">Something went wrong</string>
+    <string name="error_retry_button">Retry</string>
+
+    <!-- Generic fallback error messages (used in ViewModel) -->
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_search_failed">Search failed</string>
+    <string name="error_product_load_failed">Failed to load product</string>
+
+</resources>

@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SearchProductsUseCase</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.revest.domain.usecase</a>
+</div>
+
+<h1>Coverage Summary for Class: SearchProductsUseCase (com.revest.domain.usecase)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SearchProductsUseCase</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.revest.domain.usecase
+&nbsp;
+&nbsp;import com.revest.domain.model.Product
+&nbsp;import com.revest.domain.model.ProductsPage
+&nbsp;import com.revest.domain.repository.ProductRepository
+&nbsp;
+&nbsp;// ── Get Products (paginated) ──────────────────────────────────────────────────
+&nbsp;class GetProductsUseCase(private val repo: ProductRepository) {
+&nbsp;    open suspend operator fun invoke(limit: Int = 20, skip: Int = 0): Result&lt;ProductsPage&gt; =
+&nbsp;        repo.getProducts(limit = limit, skip = skip)
+&nbsp;}
+&nbsp;
+&nbsp;// ── Search Products ───────────────────────────────────────────────────────────
+<b class="fc">&nbsp;class SearchProductsUseCase(private val repo: ProductRepository) {</b>
+&nbsp;    suspend operator fun invoke(query: String): Result&lt;ProductsPage&gt; {
+<b class="nc">&nbsp;        if (query.isBlank())</b>
+<b class="nc">&nbsp;            return Result.failure(IllegalArgumentException(&quot;Search query must not be blank&quot;))</b>
+<b class="nc">&nbsp;        return repo.searchProducts(query.trim())</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;// ── Get Product Detail ────────────────────────────────────────────────────────
+&nbsp;class GetProductDetailUseCase(private val repo: ProductRepository) {
+&nbsp;    suspend operator fun invoke(id: Int): Result&lt;Product&gt; =
+&nbsp;        repo.getProductById(id)
+&nbsp;}
+&nbsp;
+&nbsp;// ── Get Categories ────────────────────────────────────────────────────────────
+&nbsp;class GetCategoriesUseCase(private val repo: ProductRepository) {
+&nbsp;    suspend operator fun invoke(): Result&lt;List&lt;String&gt;&gt; =
+&nbsp;        repo.getCategories()
+&nbsp;}
+&nbsp;
+&nbsp;// ── Get Products By Category ──────────────────────────────────────────────────
+&nbsp;class GetProductsByCategoryUseCase(private val repo: ProductRepository) {
+&nbsp;    suspend operator fun invoke(category: String, limit: Int, skip: Int ): Result&lt;ProductsPage&gt; =
+&nbsp;        repo.getProductsByCategory(category)
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-12 19:52</div>
+</div>
+</body>
+</html>

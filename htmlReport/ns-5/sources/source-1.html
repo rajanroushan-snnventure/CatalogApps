@@ -1,0 +1,407 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProductListEvent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.revest.feature.productlist.presentation</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductListEvent (com.revest.feature.productlist.presentation)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductListEvent</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ProductListEvent$CategorySelected</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListEvent$LoadMore</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ProductListEvent$SearchQueryChanged</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.revest.feature.productlist.presentation
+&nbsp;
+&nbsp;import com.revest.core.common.BaseViewModel
+&nbsp;import com.revest.core.common.AppDispatchers
+&nbsp;import com.revest.core.common.stateDelegate
+&nbsp;import com.revest.domain.model.Product
+&nbsp;import com.revest.domain.usecase.*
+&nbsp;import kotlinx.coroutines.FlowPreview
+&nbsp;import kotlinx.coroutines.flow.*
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;// ── State ─────────────────────────────────────────────────────────────────────
+&nbsp;data class ProductListState(
+&nbsp;    val products: List&lt;Product&gt;   = emptyList(),
+&nbsp;    val isLoading: Boolean        = false,
+&nbsp;    val isFilterLoading: Boolean  = false,
+&nbsp;    val error: String?            = null,
+&nbsp;    val searchQuery: String       = &quot;&quot;,
+&nbsp;    val selectedCategory: String? = null,
+&nbsp;    val categories: List&lt;String&gt;  = emptyList(),
+&nbsp;    val isSearchMode: Boolean     = false,
+&nbsp;    val canLoadMore: Boolean      = true,
+&nbsp;    // FIX: track skip directly instead of deriving it from currentPage * PAGE_SIZE.
+&nbsp;    // currentPage was read from a stale snapshot `s` captured before the coroutine
+&nbsp;    // ran, so page 3+ always re-sent skip=20. Using skip avoids the off-by-one.
+&nbsp;    val currentSkip: Int          = 0,
+&nbsp;    val totalProducts: Int        = 0
+&nbsp;)
+&nbsp;
+&nbsp;// ── Events ────────────────────────────────────────────────────────────────────
+<b class="fc">&nbsp;sealed class ProductListEvent {</b>
+<b class="fc">&nbsp;    data class SearchQueryChanged(val query: String) : ProductListEvent()</b>
+<b class="fc">&nbsp;    data class CategorySelected(val category: String?) : ProductListEvent()</b>
+&nbsp;    data class ProductClicked(val productId: Int) : ProductListEvent()
+<b class="fc">&nbsp;    object LoadMore     : ProductListEvent()</b>
+&nbsp;    object Refresh      : ProductListEvent()
+&nbsp;    object DismissError : ProductListEvent()
+&nbsp;}
+&nbsp;
+&nbsp;// ── ViewModel ─────────────────────────────────────────────────────────────────
+&nbsp;class ProductListViewModel(
+&nbsp;    private val getProductsUseCase: GetProductsUseCase,
+&nbsp;    private val searchProductsUseCase: SearchProductsUseCase,
+&nbsp;    private val getCategoriesUseCase: GetCategoriesUseCase,
+&nbsp;    private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase
+&nbsp;) : BaseViewModel() {
+&nbsp;
+&nbsp;    private val _stateDelegate = stateDelegate(ProductListState(isLoading = true))
+&nbsp;    val state: StateFlow&lt;ProductListState&gt; by _stateDelegate
+&nbsp;
+&nbsp;    private val _searchFlow = MutableStateFlow(&quot;&quot;)
+&nbsp;
+&nbsp;    init {
+&nbsp;        loadCategories()
+&nbsp;        loadProducts(reset = true)
+&nbsp;        observeSearch()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onEvent(event: ProductListEvent) {
+&nbsp;        when (event) {
+&nbsp;            is ProductListEvent.SearchQueryChanged -&gt; {
+&nbsp;                _stateDelegate.update { it.copy(searchQuery = event.query) }
+&nbsp;                _searchFlow.value = event.query
+&nbsp;                if(event.query.isNotEmpty()) {
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            isSearchMode = true,
+&nbsp;                            error = null
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                } else {
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            isSearchMode = false,
+&nbsp;                            error = null
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;            is ProductListEvent.CategorySelected -&gt; {
+&nbsp;                _stateDelegate.update {
+&nbsp;                    it.copy(
+&nbsp;                        selectedCategory = event.category,
+&nbsp;                        isFilterLoading  = false,
+&nbsp;                        isLoading = false,
+&nbsp;                        currentSkip      = 0,
+&nbsp;                        canLoadMore      = true,
+&nbsp;                        searchQuery      = &quot;&quot;,
+&nbsp;                        isSearchMode     = false,
+&nbsp;                        error            = null
+&nbsp;                    )
+&nbsp;                }
+&nbsp;                _searchFlow.value = &quot;&quot;
+&nbsp;                loadProducts(reset = true)
+&nbsp;            }
+&nbsp;            ProductListEvent.LoadMore -&gt; {
+&nbsp;                val s = _stateDelegate.current
+&nbsp;                if (!s.isLoading &amp;&amp; !s.isFilterLoading &amp;&amp; s.canLoadMore &amp;&amp; !s.isSearchMode) {
+&nbsp;                    loadProducts(reset = false)
+&nbsp;                }
+&nbsp;            }
+&nbsp;            ProductListEvent.Refresh -&gt; {
+&nbsp;                _stateDelegate.update {
+&nbsp;                    it.copy(
+&nbsp;                        products    = emptyList(),
+&nbsp;                        currentSkip = 0,
+&nbsp;                        canLoadMore = true,
+&nbsp;                        error       = null
+&nbsp;                    )
+&nbsp;                }
+&nbsp;                loadProducts(reset = true)
+&nbsp;            }
+&nbsp;            ProductListEvent.DismissError -&gt;
+&nbsp;                _stateDelegate.update { it.copy(error = null) }
+&nbsp;            is ProductListEvent.ProductClicked -&gt; { /* handled by NavController */ }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @OptIn(FlowPreview::class)
+&nbsp;    private fun observeSearch() {
+&nbsp;        launch(AppDispatchers.default) {
+&nbsp;            _searchFlow
+&nbsp;                .debounce(400)
+&nbsp;                .distinctUntilChanged()
+&nbsp;                .collectLatest { query -&gt;
+&nbsp;                    if (query.isBlank()) {
+&nbsp;                        _stateDelegate.update {
+&nbsp;                            it.copy(
+&nbsp;                                isSearchMode    = false,
+&nbsp;                                isFilterLoading = true,
+&nbsp;                                currentSkip     = 0,
+&nbsp;                                canLoadMore     = true
+&nbsp;                            )
+&nbsp;                        }
+&nbsp;                        loadProducts(reset = true)
+&nbsp;                    } else {
+&nbsp;                        performSearch(query.trim())
+&nbsp;                    }
+&nbsp;                }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun loadProducts(reset: Boolean) {
+&nbsp;        // Read state ONCE inside the coroutine just before the network call
+&nbsp;        // so we always have the freshest skip value.
+&nbsp;        launch(AppDispatchers.io) {
+&nbsp;            val s = _stateDelegate.current
+&nbsp;            if (s.isSearchMode) return@launch
+&nbsp;
+&nbsp;            _stateDelegate.update { it.copy(isLoading = true, error = null) }
+&nbsp;
+&nbsp;            // FIX: use currentSkip from state (updated after each page) instead of
+&nbsp;            // computing skip = currentPage * PAGE_SIZE from a stale outer snapshot.
+&nbsp;            val skip = if (reset) 0 else _stateDelegate.current.currentSkip
+&nbsp;
+&nbsp;            val result = if (s.selectedCategory != null) {
+&nbsp;                // FIX: pass limit + skip so category results also paginate
+&nbsp;                getProductsByCategoryUseCase(
+&nbsp;                    category = s.selectedCategory,
+&nbsp;                    limit    = PAGE_SIZE,
+&nbsp;                    skip     = skip
+&nbsp;                )
+&nbsp;            } else {
+&nbsp;                getProductsUseCase(limit = PAGE_SIZE, skip = skip)
+&nbsp;            }
+&nbsp;
+&nbsp;            result.fold(
+&nbsp;                onSuccess = { page -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        val merged   = if (reset) page.products else it.products + page.products
+&nbsp;                        val nextSkip = skip + page.products.size
+&nbsp;                        it.copy(
+&nbsp;                            products        = merged,
+&nbsp;                            totalProducts   = page.total,
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            // FIX: advance skip by the number of items actually returned,
+&nbsp;                            // not by PAGE_SIZE, so the last partial page is handled correctly
+&nbsp;                            currentSkip     = nextSkip,
+&nbsp;                            canLoadMore     = page.hasMore,
+&nbsp;                            isSearchMode    = false
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                },
+&nbsp;                onFailure = { err -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            error           = err.message ?: &quot;Unknown error&quot;
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun performSearch(query: String) {
+&nbsp;        launch(AppDispatchers.io) {
+&nbsp;            _stateDelegate.update {
+&nbsp;                it.copy(isLoading = true, error = null, isSearchMode = true)
+&nbsp;            }
+&nbsp;            searchProductsUseCase(query).fold(
+&nbsp;                onSuccess = { page -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            products        = page.products,
+&nbsp;                            totalProducts   = page.total,
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            canLoadMore     = false
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                },
+&nbsp;                onFailure = { err -&gt;
+&nbsp;                    _stateDelegate.update {
+&nbsp;                        it.copy(
+&nbsp;                            isLoading       = false,
+&nbsp;                            isFilterLoading = false,
+&nbsp;                            error           = err.message ?: &quot;Search failed&quot;
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun loadCategories() {
+&nbsp;        launch(AppDispatchers.io) {
+&nbsp;            getCategoriesUseCase().onSuccess { cats -&gt;
+&nbsp;                _stateDelegate.update { it.copy(categories = cats) }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    companion object {
+&nbsp;        private const val PAGE_SIZE = 20
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-12 19:52</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Revest Catalog — Splash Screen Icon
+  A shopping bag on a white circle, matching the Compose splash screen.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- White circle background -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
+
+    <!-- Shopping bag body (indigo) -->
+    <path
+        android:fillColor="#1A237E"
+        android:pathData="M38,48 L70,48 L65,72 L43,72 Z" />
+
+    <!-- Shopping bag handle (indigo) -->
+    <path
+        android:fillColor="#1A237E"
+        android:pathData="M46,48 Q46,38 54,38 Q62,38 62,48"
+        android:strokeColor="#1A237E"
+        android:strokeWidth="4"
+        android:fillAlpha="0"
+        android:strokeLineCap="round" />
+
+</vector>

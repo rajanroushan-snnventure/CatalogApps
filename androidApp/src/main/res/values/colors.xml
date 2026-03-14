@@ -16,7 +16,7 @@
     <color name="tertiary_dark">#BFC6FF</color>
 
     <color name="error_light">#BA1A1A</color>
-    <color name="error_container_light">#FFDDAD6</color>
+<!--    <color name="error_container_light">#FFDDAD6</color>-->
     <color name="error_dark">#FFB4AB</color>
     <color name="error_container_dark">#93000A</color>
 

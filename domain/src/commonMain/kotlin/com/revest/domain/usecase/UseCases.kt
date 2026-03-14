@@ -5,7 +5,7 @@ import com.revest.domain.model.ProductsPage
 import com.revest.domain.repository.ProductRepository
 
 // ── Get Products (paginated) ──────────────────────────────────────────────────
-class GetProductsUseCase(private val repo: ProductRepository) {
+open class GetProductsUseCase(private val repo: ProductRepository) {
     open suspend operator fun invoke(limit: Int = 20, skip: Int = 0): Result<ProductsPage> =
         repo.getProducts(limit = limit, skip = skip)
 }
